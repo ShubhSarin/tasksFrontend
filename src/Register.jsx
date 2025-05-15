@@ -51,9 +51,10 @@ export default function Register(){
                             navigate('/tasks/')
                         }
                     } catch(err){
-                        setError(err)
+                        setError(err.message)   
                     }
                 }}>Register</button>
+            <div className="text-red-500 mt-2 flex justify-center">{error} </div>
             </form>
         </div>
         </>
@@ -111,10 +112,15 @@ async function registerRequest(username, password, email, firstName, lastName){
             localStorage.setItem("token", data.token);
             return true
         } else {
-            throw new Error(response.status)
+            const errorData = await response.json()
+            if(errorData.error){
+                throw new Error(errorData.error)
+            }
+            const messages = Object.values(errorData).flat().join(" ")
+            throw new Error(messages || "Registration Failed")
         }
     } catch (err) {
-        throw new Error(err)
+        throw err;
     }
 
 }

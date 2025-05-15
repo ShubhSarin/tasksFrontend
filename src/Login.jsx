@@ -17,7 +17,6 @@ export default function Login(){
                 }
             }
             catch(err) {
-                setError(err);
             }
         };
         checkAuthentication();
@@ -45,6 +44,9 @@ export default function Login(){
                 });
             }
         }}>Login</button>
+        {error && (
+            <div className="text-red-500 mt-2 w-full flex justify-center">{error}</div>  
+        )}
     </form>
     </div>
     )
@@ -73,28 +75,30 @@ async function checkAuth(){
 }
 
 function loginRequest(username, password){
-    return fetch(serverURL + "/authentication/login/", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            username: username,
-            password: password,
-        }),
-    })
-    .then((response) => {
-        if (response.status === 200) {
-            return response.json();
-        }
-        else if (response.status === 401) {
-            throw new Error("Invalid username or password");
-        } else {
-            throw new Error("Something went wrong. Please try again later.");
-        }
-    })
-    .then((data) => {
-        localStorage.setItem("token", data.token);
-        return data;
-    })
+    try{
+        return fetch(serverURL + "/authentication/login/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password,
+            }),
+        })
+        .then((response) => {
+            if (response.status === 200) {
+                return response.json();
+            }
+            else {
+                throw new Error("Invalid username or password");
+            } 
+        })
+        .then((data) => {
+            localStorage.setItem("token", data.token);
+            return data;
+        })
+    } catch (err) {
+        throw err
+    }
 }
