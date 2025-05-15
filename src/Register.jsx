@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-const serverURL = 'https://task-ca6l.onrender.com'
+const serverURL = import.meta.env.VITE_APP_SERVER_URL;
 
 export default function Register(){
     const[username, setUsername] = useState('')
@@ -40,7 +39,7 @@ export default function Register(){
                 <input className="border-2 border-slate-500 rounded-[7px] m-1 p-3 w-full" type="email" placeholder="Email" value={email} onChange={(e) => {setEmail(e.target.value)}} />
                 <input className="border-2 border-slate-500 rounded-[7px] m-1 p-3 w-full" type="password" placeholder="Password" value={password} onChange={(e) => {setPassword(e.target.value)}} />
                 </div>
-                <button className="border-4 border-slate-500 p-3 rounded-[7px] hover:cursor-pointer" onClick={async (e) => {
+                <button className="border-4 border-slate-500 p-3 rounded-[7px] hover:cursor-pointer transition delay-0 ease-in-out duration-300 hover:scale-105" onClick={async (e) => {
                     e.preventDefault()
                     if(username==='' || password==='' || firstName==='' || lastName==='' || email===''){
                         setError("Please fill all the fields")
